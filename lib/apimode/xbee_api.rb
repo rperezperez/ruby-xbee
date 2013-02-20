@@ -31,13 +31,19 @@ module XBee
     def get_param(at_param_name, at_param_unpack_string = nil)
       frame_id = self.next_frame_id
       at_command_frame = XBee::Frame::ATCommand.new(at_param_name,frame_id,nil,at_param_unpack_string)
-      # puts "Sending ... [#{at_command_frame._dump.unpack("C*").join(", ")}]"
+      puts "Sending ... [#{at_command_frame._dump.unpack("C*").join(", ")}]"
       self.xbee_serialport.write(at_command_frame._dump)
       r = XBee::Frame.new(self.xbee_serialport)
       if r.kind_of?(XBee::Frame::ATCommandResponse) && r.status == :OK && r.frame_id == frame_id
         if block_given?
           yield r
         else
+          #### DEBUG ####
+          if $DEBUG then
+            print "At parameter unpack string to be used: #{at_param_unpack_string} | "
+            puts "Debug Return value for value: #{r.retrieved_value.unpack(at_param_unpack_string)}"
+          end
+          #### DEBUG ####
           at_param_unpack_string.nil? ? r.retrieved_value : r.retrieved_value.unpack(at_param_unpack_string).first
         end
       else
@@ -65,7 +71,7 @@ module XBee
     def get_remote_param(at_param_name, remote_address = 0x000000000000ffff, remote_network_address = 0xfffe, at_param_unpack_string = nil)
       frame_id = self.next_frame_id
       at_command_frame = XBee::Frame::RemoteCommandRequest.new(at_param_name, remote_address, remote_network_address, frame_id, nil, at_param_unpack_string)
-      puts "Sending ... [#{at_command_frame._dump.unpack("C*").join(", ")}]"
+      puts "Sending ... [#{at_command_frame._dump.unpack("C*").join(", ")}]" 
       self.xbee_serialport.write(at_command_frame._dump)
       r = XBee::Frame.new(self.xbee_serialport)
       if r.kind_of?(XBee::Frame::RemoteCommandResponse) && r.status == :OK && r.frame_id == frame_id
@@ -97,7 +103,8 @@ module XBee
     end
 
     def version_long
-      @version_long ||= get_param("VL","a*")
+      @version_long ||= get_param("AI","n")
+      if @version_long == nil then @version_long = 0 end
     end
 
 =begin rdoc

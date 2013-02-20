@@ -19,8 +19,10 @@ module XBee
         status_byte = data_string.unpack("c")
         # update status ivar for later use
         self.status = case status_byte
-        when 1..3 : modem_statuses.assoc(status_byte)
-        else raise "ModemStatus frame appears to include an invalid status value: #{data_string}"
+        when 1..3
+          modem_statuses.assoc(status_byte)
+        else
+          raise "ModemStatus frame appears to include an invalid status value: #{data_string}"
         end
         #actually assign and move along
         @cmd_data = data_string

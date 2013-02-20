@@ -32,11 +32,10 @@ require 'date'
 require 'pp'
 
 require 'rubygems'
-gem 'ruby-serialport'
+gem 'serialport'
 require 'serialport'
 
 require 'module_config'
-require 'apimode/xbee_api'
 
 module XBee
   ##
@@ -111,10 +110,14 @@ module XBee
     # work fine for most cases.  The unit of time for a timeout constant is ms
     def read_timeout(type = :short)
       case type
-        when :short : 1200
-        when :long : 3000
+        when :short
+          1200
+        when :long 
+          3000
         else 3000
       end
     end
   end
 end  # module XBee
+
+require 'apimode/xbee_api'

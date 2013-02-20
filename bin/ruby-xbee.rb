@@ -1,7 +1,7 @@
 begin
   require 'rubygems'
   gem 'ruby-xbee'
-rescue LoadError => e
+# rescue LoadError => e
   load_path_addition = File.dirname(File.dirname(__FILE__)) + "/lib"
   puts "Falling back to extended load path #{load_path_addition}"
   $: << load_path_addition
@@ -9,8 +9,10 @@ rescue LoadError => e
 end
 
 @xbee_usbdev_str = case ARGV[0]
-  when "cable" : "/dev/tty.usbserial-FTE4UXEA"
-  else "/dev/tty.usbserial-A7004nmf"
+  when "cable" 
+    "/dev/tty.usbserial-A101KYF6"
+  else
+    "/dev/tty.usbserial-A101KYF6"
 end
 
 # default baud - this can be overridden on the command line
@@ -21,3 +23,4 @@ end
 @stop_bits = 1
 @parity = 0
 
+puts File.dirname(File.dirname(__FILE__)) + "/lib"

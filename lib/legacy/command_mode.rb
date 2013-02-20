@@ -32,7 +32,7 @@ module XBee
       # if XBee is already in command mode, there will be no response, so make an explicit
       # AT call to insure an OK response
       @xbee_serialport.write("AT\r")
-      getresponse().strip.chomp
+      getresponse().strip.chomp if getresponse()
     end
 
 =begin rdoc
@@ -41,7 +41,7 @@ module XBee
     def fw_rev
       @xbee_serialport.write("ATVR\r")
       response = getresponse
-      response.strip.chomp
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -50,7 +50,7 @@ module XBee
     def hw_rev
       @xbee_serialport.write("ATHV\r")
       response = getresponse
-      response.strip.chomp
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -123,7 +123,7 @@ module XBee
 =end
     def my_src_address
       @xbee_serialport.write("ATMY\r")
-      getresponse.strip.chomp
+      getresponse.strip.chomp if getresponse
     end
 
 =begin rdoc
@@ -195,7 +195,7 @@ module XBee
       @xbee_serialport.write("ATCH\r")
       response = getresponse
       @xbee_serialport.read_timeout = tmp
-      response.strip.chomp
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -208,7 +208,7 @@ module XBee
       @xbee_serialport.write("ATCH#{new_channel}\r")
       response = getresponse
       @xbee_serialport.read_timeout = tmp
-      response.strip.chomp
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -224,7 +224,7 @@ module XBee
       if ( response.nil? )
         return ""
       else
-        response.strip.chomp
+        response.strip.chomp 
       end
     end
 
@@ -274,10 +274,10 @@ module XBee
 =end
     def received_signal_strength
       @xbee_serialport.write("ATDB\r")
-      response = getresponse().strip.chomp
+      response = getresponse().strip.chomp if getresponse()
       # this response is an absolute hex value which is in -dBm
       # modify this so it returns actual - dBm value
-      dbm = -(response.hex)
+      dbm = -(response.hex) if response
     end
 
 =begin rdoc
@@ -289,7 +289,7 @@ module XBee
     def baud
       @xbee_serialport.write("ATBD\r")
       baudcode = getresponse
-      @baudcodes.index( baudcode.to_i )
+      @baudcodes.key( baudcode.to_i )
     end
 
 =begin rdoc
@@ -313,8 +313,8 @@ module XBee
 =end
    def parity
      @xbee_serialport.write("ATNB\r")
-     response = getresponse().strip.chomp
-     @paritycodes.index( response.to_i )
+     response = getresponse().strip.chomp if getresponse()
+     @paritycodes.key( response.to_i )
    end
 
 =begin rdoc
@@ -371,7 +371,7 @@ module XBee
           return :CTS
         end
       else
-        @iotypes.index(response)
+        @iotypes.key(response)
       end
 
     end
@@ -465,13 +465,13 @@ module XBee
         when 1
           samples[:NUM] = line.to_i
         when 2
-          samples[:CM] = line.strip.chomp
+          samples[:CM] = line.strip.chomp if line
         when 3
-          samples[:DIO] = line.strip.chomp
+          samples[:DIO] = line.strip.chomp if line
         else
-          sample = line.strip.chomp
+          sample = line.strip.chomp if line
           if ( !sample.nil? && sample.size > 0 )
-            samples["ADC#{adc_sample}".to_sym] = line.strip.chomp
+            samples["ADC#{adc_sample}".to_sym] = line.strip.chomp if line
             adc_sample += 1
           end
         end

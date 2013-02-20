@@ -17,36 +17,57 @@ module XBee
 
     def Frame.new(source_io)
       stray_bytes = []
-      until (start_delimiter = source_io.readchar) == 0x7e
-        puts "Stray byte 0x%x" % start_delimiter
+      until (start_delimiter = source_io.readchar.unpack('H*').join.to_i(16)) == 0x7e
+        #puts "Stray byte 0x%x" % start_delimiter
+        print "DEBUG: #{start_delimiter} | " if $DEBUG
         stray_bytes << start_delimiter
       end
       puts "Got some stray bytes for ya: #{stray_bytes.map {|b| "0x%x" % b} .join(", ")}" unless stray_bytes.empty?
       header = source_io.read(3).xb_unescape
-      puts "Read header: #{header.unpack("C*").join(", ")}"
+      print "Reading ... header after start byte: #{header.unpack("C*").join(", ")} | " if $DEBUG
       frame_remaining = frame_length = api_identifier = cmd_data = ""
       if header.length == 3
         frame_length, api_identifier = header.unpack("nC")
       else
         frame_length, api_identifier = header.unpack("n").first, source_io.readchar
       end
+      #### DEBUG ####
+      if $DEBUG then
+      print "Frame length: #{frame_length} | "
+      print "Api Identifier: #{api_identifier} | "
+      end
+      #### DEBUG ####
       cmd_data_intended_length = frame_length - 1
       while ((unescaped_length = cmd_data.xb_unescape.length) < cmd_data_intended_length)
         cmd_data += source_io.read(cmd_data_intended_length - unescaped_length)
       end
       data = api_identifier.chr + cmd_data.xb_unescape
-      sent_checksum = source_io.getc
+      sent_checksum = source_io.getc.unpack('H*').join.to_i(16)
+      #### DEBUG ####
+      if $DEBUG then
+      print "Sent checksum: #{sent_checksum} | "
+      print "Received checksum: #{Frame.checksum(data)} | "
+      print "Payload: #{cmd_data.unpack("C*").join(", ")} | "
+      end
+      #### DEBUG ####
       unless sent_checksum == Frame.checksum(data)
         raise "Bad checksum - data discarded"
       end
-      case data[0]
-      when 0x8A : ModemStatus.new(data)
-      when 0x88 : ATCommandResponse.new(data)
-      when 0x97 : RemoteCommandResponse.new(data)
-      when 0x8B : TransmitStatus.new(data)
-      when 0x90 : ReceivePacket.new(data)
-      when 0x91 : ExplicitRxIndicator.new(data)
-      else ReceivedFrame.new(data)
+      case data[0].unpack('H*')[0].to_i(16)
+        when 0x8A
+          ModemStatus.new(data)
+        when 0x88 
+          ATCommandResponse.new(data)
+        when 0x97 
+          RemoteCommandResponse.new(data)
+        when 0x8B 
+          TransmitStatus.new(data)
+        when 0x90 
+          ReceivePacket.new(data)
+        when 0x91 
+          ExplicitRxIndicator.new(data)
+        else 
+          ReceivedFrame.new(data)
       end
     end
 
@@ -71,9 +92,13 @@ module XBee
 
     class ReceivedFrame < Base
       def initialize(frame_data)
-        raise "Frame data must be an enumerable type" unless frame_data.kind_of?(Enumerable)
+        # raise "Frame data must be an enumerable type" unless frame_data.kind_of?(Enumerable)
         self.api_identifier = frame_data[0]
-        # puts "Initializing a ReceivedFrame of type 0x%x" % self.api_identifier
+        if $DEBUG then
+          print "Initializing a ReceivedFrame of type 0x%x | " % self.api_identifier.unpack('H*').join.to_i(16)
+        else
+          puts "Initializing a ReceivedFrame of type 0x%x" % self.api_identifier.unpack('H*').join.to_i(16)
+        end
         self.cmd_data = frame_data[1..-1]
       end
     end

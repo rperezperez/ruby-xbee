@@ -14,11 +14,19 @@ module XBee
       def cmd_data=(data_string)
         self.frame_id, self.at_command, status_byte, self.retrieved_value = data_string.unpack("Ca2Ca*")
         self.status = case status_byte
-        when 0..3 : command_statuses[status_byte]
-        else raise "AT Command Response frame appears to include an invalid status: 0x%x" % status_byte
+        when 0..3 
+          command_statuses[status_byte]
+        else
+          raise "AT Command Response frame appears to include an invalid status: 0x%x" % status_byte
         end
         #actually assign and move along
         @cmd_data = data_string
+        #### DEBUG ####
+        if $DEBUG then
+          print "Retrieved Value: #{self.retrieved_value.unpack('C*').join(', ')} | "
+          print "Retrieved Value: #{self.retrieved_value.unpack('a*')} | "
+        end
+        #### DEBUG ####
       end
     end
   end
