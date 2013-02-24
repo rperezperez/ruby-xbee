@@ -1,0 +1,30 @@
+% Special character reminder: # $ % & ~ _ ^ \ { }
+
+
+\section{Hardware for testing}
+\begin{table}[ht]\caption{Xbees used for testing}\centering\begin{tabular}{c c c c}\hline\hlineModel & Operating Model & Function Set & Firmware \\ [0.5ex] % inserts table %heading\hline
+XB24-Z7WIT-004 & API & Zigbee Coordinator API & 21A7 \\ [1ex]\hline\end{tabular}\label{table:nonlin}\end{table}
+
+\section{Known Errors}
+First things first. The ApiMode is broken for just listening traffic. Trying something like this:\bug{Fix the getresponse in API mode}
+\begin{code}
+\begin{lstlisting}
+require 'date'
+require 'ruby-xbee'
+require 'pp'
+
+@xbee = XBee::BaseAPIModeInterface.new(@xbee_usbdev_str)
+
+# read XBee output forever
+while( 1 )
+  @xbee.getresponse
+end
+\end{lstlisting}
+\end{code}
+
+If multiple lines of frames are incoming the getresults will choke in ruby:
+\begin{code}
+\begin{lstlisting}
+results.gsub!( "\r", "\n")
+\end{lstlisting}
+\end{code}
