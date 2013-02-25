@@ -1,5 +1,5 @@
 %%%%% Preamble
-\documentclass[10pt,a4paper,DIV=12]{scrartcl}	
+\documentclass[10pt,a4paper,parskip=half,DIV=12]{scrartcl}
 % KOMA scrartcl is called for several reasons:
 % Nicer page margins without the need of the 'geometry' package
 % Perfectly fitting abstract environment
@@ -9,6 +9,7 @@
 \usepackage{fontspec}
 \usepackage{tikz}
 \usepackage{listings}
+\usepackage{setspace}
 \usepackage[colorinlistoftodos]{todonotes}
 % Code environment
 \lstset{language=Ruby, tabsize=2}
@@ -45,10 +46,12 @@
 %\lstinputlisting[...options]{...filepath}
 %\end{code}
 % Code environment end
-
-% Bug command
-\newcommand{\bug}[2][] {\todo[color=red, #1]{#2}}
-% Bug command end
+% Bug and notes command
+\newcommand{\bug}[2][] {\todo[color=red, caption={#2}, #1]
+ {\begin{spacing}{0.5}#2\end{spacing}}}
+\newcommand{\smalltodo}[2][] {\todo[caption={#2}, #1]
+ {\begin{spacing}{0.5}#2\end{spacing}}}
+% Bug and notes command end
 
 \input{article.tex}
 \input{content.tex}

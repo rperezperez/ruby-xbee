@@ -1,12 +1,14 @@
 % Special character reminder: # $ % & ~ _ ^ \ { }
-
-
+\setlength{\parindent}{0pt}
 \section{Hardware for testing}
 \begin{table}[ht]\caption{Xbees used for testing}\centering\begin{tabular}{c c c c}\hline\hlineModel & Operating Model & Function Set & Firmware \\ [0.5ex] % inserts table %heading\hline
 XB24-Z7WIT-004 & API & Zigbee Coordinator API & 21A7 \\ [1ex]\hline\end{tabular}\label{table:nonlin}\end{table}
 
-\section{Known Errors}
-First things first. The ApiMode is broken for just listening traffic. Trying something like this:\bug{Fix the getresponse in API mode}
+\section{Known Errors and Issues}
+%%
+\subsection{API mode listening of packets}
+First things first. The ApiMode is broken for just listening traffic. Trying something like this:
+\bug[noline]{Fix the getresponse in API mode}
 \begin{code}
 \begin{lstlisting}
 require 'date'
@@ -22,9 +24,16 @@ end
 \end{lstlisting}
 \end{code}
 
+
 If multiple lines of frames are incoming the getresults will choke in ruby:
 \begin{code}
 \begin{lstlisting}
 results.gsub!( "\r", "\n")
 \end{lstlisting}
 \end{code}
+%%
+
+\subsection{No more config/xbeeconfig.rb}\smalltodo[noline]{Find replacement solution for xbeeconfig.rb}
+The config/xbeeconfig.rb was removed by Mike Ashmore and for good reason. The config had needed configuration detailing where and how to read the XBee module, but it wasn't the best solution especially as it ruined a good way to Gemify the Ruby::XBee code.
+
+\noindent The commit code reads: \textit{"Removed conf/xbeeconfig.rb - it's not a good way to do this. Of cours… …e now I need to figure out what \textbf{is} a good way to do this.} However, seems there was no good solution as currently the values are hardcoded to \textbf{bin/ruby-xbee.rb}.

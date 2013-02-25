@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.executables = ["apicontrol.rb", "ruby-xbee.rb", "xbeeconfigure.rb", "xbeedio.rb", "xbeeinfo.rb", "xbeelisten.rb", "xbeesend.rb"]
   s.extra_rdoc_files = [
     "LICENSE",
-    "README",
     "README.rdoc"
   ]
   s.files = [
