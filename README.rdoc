@@ -183,9 +183,11 @@ Current host platforms supported:
   Mac OS X (PPC or Intel) 
 
 == Release Notes
-x/x/2013 Riby::XBee Version 1.1 - Requirements: Ruby 1.9.3; serialport 1.1.0
+x/x/2013 Ruby::XBee Version 1.1 - Requirements: Ruby 1.9.3; serialport 1.1.0
+
 1/2/2009 Ruby::XBee Version 1.0 - Requirements: Ruby 1.8.7; ruby-serialport
 
+== Prerequisites
 * *Prerequisites* - SerialPort
 A platform-specific version of the SerialPort is a prerequisite for Ruby::XBee. Please
 refer to Rubygems ( http://rubygems.org/gems/serialport ) for package information.

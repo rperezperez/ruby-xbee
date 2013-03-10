@@ -102,21 +102,27 @@ module XBee
       end
     end
 
-    def version_long
-      @version_long ||= get_param("AI","n")
-      if @version_long == nil then @version_long = 0 end
+    ##
+    # Association Indication. Read information regarding last node join request:
+    # * 0x00 - Successful completion - Coordinator started or Router/End Device found and joined with a parent.
+    # * 0x21 - Scan found no PANs
+    # * 0x22 - Scan found no valid PANs based on current SC and ID settings
+    # * 0x23 - Valid Coordinator or Routers found, but they are not allowing joining (NJ expired) 0x27 - Node Joining attempt failed
+    # * 0x2A - Coordinator Start attempt failed‘
+    # * 0xFF - Scanning for a Parent
+    def association_indication
+      @association_indication ||= get_param("AI","n")
+      if @association_indication == nil then @association_indication = 0 end
     end
 
-=begin rdoc
-  Retrieve XBee firmware version
-=end
+    ##
+    # Retrieve XBee firmware version
     def fw_rev
       @fw_rev ||= get_param("VR","n")
     end
 
-=begin rdoc
-  Retrieve XBee hardware version
-=end
+    ##
+    # Retrieve XBee hardware version
     def hw_rev
       @hw_rev ||= get_param("HV","n")
     end
@@ -174,48 +180,48 @@ module XBee
       end
     end
 
-=begin rdoc
-  returns the low portion of the XBee device's current destination address
-=end
+    ##
+    # Returns the low portion of the XBee device's current destination address
     def destination_low
       @destination_low ||= get_param("DL")
     end
 
-=begin rdoc
-  sets the low portion of the XBee device's destination address
-=end
+    ##
+    # Sets the low portion of the XBee device's destination address
+    # Parameter range: 0 - 0xFFFFFFFF
     def destination_low!(low_addr)
       @xbee_serialport.write("ATDL#{low_addr}\r")
       getresponse
     end
 
-=begin rdoc
-  returns the high portion of the XBee device's current destination address
-=end
+    ##
+    # Returns the high portion of the XBee device's current destination address
     def destination_high
       @destination_high ||= get_param("DH")
     end
 
-=begin rdoc
-  sets the high portion of the XBee device's current destination address
-=end
+    ##
+    # Sets the high portion of the XBee device's current destination address
+    # Parameter range: 0 - 0xFFFFFFFF
     def destination_high!(high_addr)
       self.xbee_serialport.write("ATDH#{high_addr}\r")
       getresponse
     end
 
     ##
-    # returns the low portion of the XBee device's serial number. this value is factory set.
+    # Returns the low portion of the XBee device's serial number. this value is factory set.
     def serial_num_low
       @serial_low ||= get_param("SL","N")
     end
 
     ##
-    # returns the high portion of the XBee device's serial number. this value is factory set.
+    # Returns the high portion of the XBee device's serial number. this value is factory set.
     def serial_num_high
       @serial_high ||= get_param("SH","N")
     end
 
+    ##
+    # Returns the complete serialnumber of XBee device by quering the high and low parts.
     def serial_num
       self.serial_num_high() << 32 | self.serial_num_low
     end
@@ -517,17 +523,40 @@ module XBee
       getresponse
     end
 
-=begin rdoc
-  resets the XBee module through software and simulates a power off/on.   Any configuration
-  changes that have not been saved with the save! method will be lost during reset.
-=end
+    ##
+    # Resets the XBee module through software and simulates a power off/on. Any configuration
+    # changes that have not been saved with the save! method will be lost during reset.
+    #
+    # The module responds immediately with "OK" then performs a reset ~2 seconds later.
+    # The reset is a required when the module's SC or ID has been changes to take into affect.
     def reset!
       @xbee_serialport.write("ATFR\r")
     end
+    
+    ##
+    # Performs a network reset on one or more modules within a PAN. The module responds
+    # immediately with an "OK" and then restarts the network. All network configuration
+    # and routing information is lost if not saved.
+    #
+    # Parameter range: 0-1
+    # * 0: Resets network layer parameters on the node issuing the command.
+    # * 1: Sends broadcast transmission to reset network layer parameters on all nodes in the PAN.
+    def network_reset!(reset_range)
+      if reset_range == 0
+        @xbee_serialport.write("ATNR0\r")
+      if reset_range == 1
+        @xbee_serialport.write("ATNR1\r")
+      else
+        #### DEBUG ####
+        if $DEBUG then
+          puts "Invalid parameter provided: #{reset_range}"
+        end
+        #### DEBUG ####
+    end
 
-=begin rdoc
-  Restores all the module parameters to factory defaults
-=end
+    ##
+    # Restores all the module parameters to factory defaults
+    # Restore (RE) command does not reset the ID parameter.
     def restore!
       @xbee_serialport.write("ATRE\r")
     end

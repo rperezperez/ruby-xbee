@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 begin
   require 'rubygems'
   gem 'ruby-xbee'

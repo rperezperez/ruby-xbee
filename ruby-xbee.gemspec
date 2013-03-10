@@ -1,16 +1,22 @@
+#!/usr/bin/env gem build
 # -*- encoding: utf-8 -*-
+
+lib = File.expand_path('../lib/', __FILE__)
+$:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name = %q{ruby-xbee}
-  s.version = "0.0.5"
+  s.version = "1.1.0"
+  s.platform = Gem::Platform::RUBY
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Mike Ashmore"]
-  s.date = %q{2009-04-30}
-  s.email = %q{mike@motomike.net}
+  s.authors = ["Sten Feldman"]
+  s.date = %q{2013-03-09}
+  s.email = %q{exile@chamber.ee}
   s.executables = ["apicontrol.rb", "ruby-xbee.rb", "xbeeconfigure.rb", "xbeedio.rb", "xbeeinfo.rb", "xbeelisten.rb", "xbeesend.rb"]
   s.extra_rdoc_files = [
     "LICENSE",
+    "agpl.txt",
     "README.rdoc"
   ]
   s.files = [
