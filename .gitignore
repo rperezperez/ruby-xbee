@@ -6,3 +6,5 @@ pkg
 .texpadtmp
 *.bbprojectd
 *.gem
+.settings
+.c9revisions
