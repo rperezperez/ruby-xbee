@@ -69,6 +69,8 @@ module XBee
         else 
           ReceivedFrame.new(data)
       end
+      rescue EOFError
+        # No operation as we expect eventually something
     end
 
     class Base

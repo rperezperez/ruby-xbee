@@ -544,7 +544,7 @@ module XBee
     def network_reset!(reset_range)
       if reset_range == 0
         @xbee_serialport.write("ATNR0\r")
-      if reset_range == 1
+      elsif reset_range == 1 then
         @xbee_serialport.write("ATNR1\r")
       else
         #### DEBUG ####
@@ -552,6 +552,7 @@ module XBee
           puts "Invalid parameter provided: #{reset_range}"
         end
         #### DEBUG ####
+      end
     end
 
     ##
@@ -592,7 +593,11 @@ module XBee
   echo is disabled by default
 =end
     def getresponse( echo = false )
-      getresults( @xbee_serialport, echo )
+      if echo == true
+        r = XBee::Frame.new(self.xbee_serialport)
+      else
+        getresults( @xbee_serialport, echo )
+      end
     end
 
   end
