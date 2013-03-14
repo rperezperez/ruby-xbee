@@ -38,6 +38,7 @@ require 'serialport'
 require 'module_config'
 
 module XBee
+
   ##
   # supports legacy API, command-mode interface
   def XBee.new( xbee_usbdev_str, baud, data_bits, stop_bits, parity )

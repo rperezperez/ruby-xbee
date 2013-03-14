@@ -7,11 +7,12 @@ module XBee
   
     VERSION = "1.1.0" # Version of this class
   
-    def initialize(xbee_usbdev_str, uart_config = XBeeUARTConfig.new, operation_mode)
+    def initialize(xbee_usbdev_str, uart_config = XBeeUARTConfig.new, operation_mode = "AT")
       super(xbee_usbdev_str, uart_config, operation_mode)
       @frame_id = 1
       if self.operation_mode == "AT"
         start_apimode_communication
+      end
     end
 
     def next_frame_id
@@ -29,8 +30,6 @@ module XBee
         self.xbee_serialport.write("ATAP2\r")
         self.xbee_serialport.read(3)
       end
-      #@frames ||= []
-      #@read_thread = Thread.new {  loop {  @frames << XBee::Frame.new(self.xbee_serialport) } rescue retry }
     end
 
     def get_param(at_param_name, at_param_unpack_string = nil)
@@ -332,64 +331,59 @@ module XBee
     # sets the given baud rate into the XBee device.  The baud change will not take
     # effect until the AT command mode times out or the exit command mode command is given.
     # acceptable baud rates are: 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
-   def baud!( baud_rate )
+    def baud!( baud_rate )
       @xbee_serialport.write("ATBD#{@baudcodes[baud_rate]}\r")
       getresponse
-   end
+    end
 
-=begin rdoc
-  returns the parity of the device as represented by a symbol:
-  :None - for 8-bit none
-  :Even - for 8-bit even
-  :Odd  - for 8-bit odd
-  :Mark - for 8-bit mark
-  :Space - for 8-bit space
-=end
-   def parity
-     @xbee_serialport.write("ATNB\r")
-     response = getresponse().strip.chomp
-     @paritycodes.index( response.to_i )
-   end
+    ##
+    # returns the parity of the device as represented by a symbol:
+    # :None - for 8-bit none
+    # :Even - for 8-bit even
+    # :Odd  - for 8-bit odd
+    # :Mark - for 8-bit mark
+    # :Space - for 8-bit space
+    def parity
+       @xbee_serialport.write("ATNB\r")
+       response = getresponse().strip.chomp
+       @paritycodes.index( response.to_i )
+    end
 
-=begin rdoc
- sets the parity of the device to one represented by a symbol contained in the parity_type parameter
-  :None - for 8-bit none
-  :Even - for 8-bit even
-  :Odd  - for 8-bit odd
-  :Mark - for 8-bit mark
-  :Space - for 8-bit space
-=end
-   def parity!( parity_type )
-     # validate symbol before writing parity param
-     if !@paritycodes.include?(parity_type)
-       return false
-     end
-     @xbee_serialport.write("ATNB#{@paritycodes[parity_type]}\r")
-     getresponse
-   end
+    ##
+    # sets the parity of the device to one represented by a symbol contained in the parity_type parameter
+    # :None - for 8-bit none
+    # :Even - for 8-bit even
+    # :Odd  - for 8-bit odd
+    # :Mark - for 8-bit mark
+    # :Space - for 8-bit space
+    def parity!( parity_type )
+      # validate symbol before writing parity param
+      if !@paritycodes.include?(parity_type)
+        return false
+      end
+      @xbee_serialport.write("ATNB#{@paritycodes[parity_type]}\r")
+      getresponse
+    end
 
-=begin rdoc
-  reads an i/o port configuration on the XBee for analog to digital or digital input or output (GPIO)
-
-  this method returns an I/O type symbol of:
-
-    :Disabled
-    :ADC
-    :DI
-    :DO_Low
-    :DO_High
-    :Associated_Indicator
-    :RTS
-    :CTS
-    :RS485_Low
-    :RS485_High
-
-  Not all DIO ports are capable of every configuration listed above.  This method will properly translate
-  the XBee's response value to the symbol above when the same value has different meanings from port to port.
-
-  The port parameter may be any symbol :D0 through :D8 representing the 8 I/O ports on an XBee
-=end
-
+    ##
+    # reads an i/o port configuration on the XBee for analog to digital or digital input or output (GPIO)
+    # this method returns an I/O type symbol of:
+    #
+    # :Disabled
+    # :ADC
+    # :DI
+    # :DO_Low
+    # :DO_High
+    # :Associated_Indicator
+    # :RTS
+    # :CTS
+    # :RS485_Low
+    # :RS485_High
+    #
+    # Not all DIO ports are capable of every configuration listed above.  This method will properly translate
+    # the XBee's response value to the symbol above when the same value has different meanings from port to port.
+    #
+    # The port parameter may be any symbol :D0 through :D8 representing the 8 I/O ports on an XBee
     def dio( port )
       at = "AT#{port.to_s}\r"
       @xbee_serialport.write( at )
@@ -410,73 +404,67 @@ module XBee
 
     end
 
-=begin rdoc
-  configures an i/o port on the XBee for analog to digital or digital input or output (GPIO)
-
-  port parameter valid values are the symbols :D0 through :D8
-
-  iotype parameter valid values are symbols:
-    :Disabled
-    :ADC
-    :DI
-    :DO_Low
-    :DO_High
-    :Associated_Indicator
-    :RTS
-    :CTS
-    :RS485_Low
-    :RS485_High
-
-  note: not all iotypes are compatible with every port type, see the XBee manual for exceptions and semantics
-
-  note: it is critical you have upgraded firmware in your XBee or DIO ports 0-4 cannot be read
-        (ie: ATD0 will return ERROR - this is an XBee firmware bug that's fixed in revs later than 1083)
-
-  note: tested with rev 10CD, fails with rev 1083
-=end
-
+    ##
+    # configures an i/o port on the XBee for analog to digital or digital input or output (GPIO)
+    #
+    # port parameter valid values are the symbols :D0 through :D8
+    #
+    # iotype parameter valid values are symbols:
+    # :Disabled
+    # :ADC
+    # :DI
+    # :DO_Low
+    # :DO_High
+    # :Associated_Indicator
+    # :RTS
+    # :CTS
+    # :RS485_Low
+    # :RS485_High
+    #
+    # note: not all iotypes are compatible with every port type, see the XBee manual for exceptions and semantics
+    #
+    # note: it is critical you have upgraded firmware in your XBee or DIO ports 0-4 cannot be read
+    # (ie: ATD0 will return ERROR - this is an XBee firmware bug that's fixed in revs later than 1083)
+    #
+    # note: tested with rev 10CD, fails with rev 1083
     def dio!( port, iotype )
       at = "AT#{port.to_s}#{@iotypes[iotype]}\r"
       @xbee_serialport.write( at )
       getresponse
     end
 
-=begin rdoc
-  reads the bitfield values for change detect monitoring.  returns a bitmask indicating
-  which DIO lines, 0-7 are enabled or disabled for change detect monitoring
-=end
+    ##
+    # reads the bitfield values for change detect monitoring.  returns a bitmask indicating
+    # which DIO lines, 0-7 are enabled or disabled for change detect monitoring
     def dio_change_detect
       @xbee_serialport.write("ATIC\r")
       getresponse
     end
 
-=begin rdoc
-  sets the bitfield values for change detect monitoring.  The hexbitmap parameter is a bitmap
-  which enables or disables the change detect monitoring for any of the DIO ports 0-7
-=end
+    ##
+    # sets the bitfield values for change detect monitoring.  The hexbitmap parameter is a bitmap
+    # which enables or disables the change detect monitoring for any of the DIO ports 0-7
     def dio_change_detect!( hexbitmap )
       @xbee_serialport.write("ATIC#{hexbitmask}\r")
       getresponse
     end
 
-=begin rdoc
-  Sets the digital output levels of any DIO lines which were configured for output using the dio! method.
-  The parameter, hexbitmap, is a hex value which represents the 8-bit bitmap of the i/o lines on the
-  XBee.
-=end
+    ##
+    # Sets the digital output levels of any DIO lines which were configured for output using the dio! method.
+    # The parameter, hexbitmap, is a hex value which represents the 8-bit bitmap of the i/o lines on the
+    # XBee.
     def io_output!( hexbitmap )
       @xbee_serialport.write("ATIO#{hexbitmap}\r")
       getresponse
     end
 
-=begin rdoc
-  Forces a sampling of all DIO pins configured for input via dio!
-  Returns a hash with the following key/value pairs:
-  :NUM => number of samples
-  :CM => channel mask
-  :DIO => dio data if DIO lines are enabled
-  :ADCn => adc sample data (one for each ADC channel enabled)
-=end
+    ##
+    # Forces a sampling of all DIO pins configured for input via dio!
+    # Returns a hash with the following key/value pairs:
+    # :NUM => number of samples
+    # :CM => channel mask
+    # :DIO => dio data if DIO lines are enabled
+    # :ADCn => adc sample data (one for each ADC channel enabled)
     def io_input
 
       tmp = @xbee_serialport.read_timeout
@@ -517,10 +505,9 @@ module XBee
       samples
     end
 
-=begin rdoc
-  writes the current XBee configuration to the XBee device's flash.   There
-  is no undo for this operation
-=end
+    ##
+    # writes the current XBee configuration to the XBee device's flash.   There
+    # is no undo for this operation
     def save!
       @xbee_serialport.write("ATWR\r")
       getresponse
@@ -565,36 +552,33 @@ module XBee
       @xbee_serialport.write("ATRE\r")
     end
 
-=begin rdoc
-  just a straight pass through of data to the XBee.  This can be used to send
-  data when not in AT command mode, or if you want to control the XBee with raw
-  commands, you can send them this way.
-=end
+    ##
+    # just a straight pass through of data to the XBee.  This can be used to send
+    # data when not in AT command mode, or if you want to control the XBee with raw
+    # commands, you can send them this way.
     def send!(message)
       @xbee_serialport.write( message )
     end
 
 
-=begin rdoc
-  exits the AT command mode - all changed parameters will take effect such as baud rate changes
-  after the exit is complete.   exit_command_mode does not permanently save the parameter changes
-  when it exits AT command mode.  In order to permanently change parameters, use the save! method
-=end
+    ##
+    # exits the AT command mode - all changed parameters will take effect such as baud rate changes
+    # after the exit is complete.   exit_command_mode does not permanently save the parameter changes
+    # when it exits AT command mode.  In order to permanently change parameters, use the save! method
     def exit_command_mode
       @xbee_serialport.write("ATCN\r")
     end
 
-=begin rdoc
-  returns the version of this class
-=end
+    ##
+    # returns the version of this class
+
     def version
       VERSION
     end
 
-=begin rdoc
-  returns results from the XBee
-  echo is disabled by default
-=end
+    ##
+    # returns results from the XBee
+    # echo is disabled by default
     def getresponse( echo = false )
       if echo == true
         r = XBee::Frame.new(self.xbee_serialport)

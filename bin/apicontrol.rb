@@ -9,7 +9,7 @@ require 'pp'
 
 puts "Testing API now ..."
 puts "====================================================="
-puts "Association Indication: 0x%02x" % @xbee.version_long
+puts "Association Indication: 0x%02x" % @xbee.association_indication
 puts "-----------------------------------------------------"
 puts "Firmware Rev: 0x%04x" % @xbee.fw_rev
 puts "-----------------------------------------------------"
