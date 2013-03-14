@@ -4,22 +4,27 @@ require File.dirname(File.dirname(__FILE__)) + '/ruby_xbee'
 
 module XBee
   class BaseAPIModeInterface < RFModule
-    def initialize(xbee_usbdev_str, uart_config = XBeeUARTConfig.new)
-      super(xbee_usbdev_str, uart_config)
+  
+    VERSION = "1.1.0" # Version of this class
+  
+    def initialize(xbee_usbdev_str, uart_config = XBeeUARTConfig.new, operation_mode)
+      super(xbee_usbdev_str, uart_config, operation_mode)
       @frame_id = 1
-      start_apimode_communication
+      if self.operation_mode == "AT"
+        start_apimode_communication
     end
 
     def next_frame_id
       @frame_id += 1
     end
 
+    ##
+    # Switch to API mode - note that in Series 2 the Operation Mode is defined
+    # by the firmware flashed to the device. Only Series 1 can switch from
+    # AT (Transparent) to API Opearation and back seamlessly.
     def start_apimode_communication
       in_command_mode do
         puts "Entering api mode"
-        # Reset module parameters to factory defaults ...
-        self.xbee_serialport.write("ATRE\r")
-        self.xbee_serialport.read(3)
         # Set API Mode 2 (include escaped characters)
         self.xbee_serialport.write("ATAP2\r")
         self.xbee_serialport.read(3)
@@ -323,12 +328,10 @@ module XBee
       @baudcodes.index( baudcode.to_i )
     end
 
-=begin rdoc
-  sets the given baud rate into the XBee device.  The baud change will not take
-  effect until the AT command mode times out or the exit command mode command is given.
-  acceptable baud rates are: 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
-  end
-=end
+    ##
+    # sets the given baud rate into the XBee device.  The baud change will not take
+    # effect until the AT command mode times out or the exit command mode command is given.
+    # acceptable baud rates are: 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
    def baud!( baud_rate )
       @xbee_serialport.write("ATBD#{@baudcodes[baud_rate]}\r")
       getresponse

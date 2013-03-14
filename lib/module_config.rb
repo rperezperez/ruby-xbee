@@ -20,7 +20,7 @@ module XBee
     ##
     # A class for encapsulating XBee programmable parameters
     class RFModuleParameter
-      attr_accessor :at_name, :value, :default_value, :retrieved
+      attr_accessor :at_name, :value, :default_value, :retrieved, :operation_mode
 
       def initialize(at_name, default_value)
         self.at_name= at_name
