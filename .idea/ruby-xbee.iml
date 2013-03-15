@@ -13,8 +13,18 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="activesupport (v3.2.12, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bourne (v1.1.2, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v1.2.3, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="i18n (v0.6.4, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="metaclass (v0.0.1, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="mocha (v0.10.5, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.6.1, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.0.3, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="serialport (v1.1.0, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="shoulda (v3.3.2, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="shoulda-context (v1.0.2, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="shoulda-matchers (v1.4.2, RVM: ruby-1.9.3-p194 [xbee]) [gem]" level="application" />
   </component>
 </module>
 
