@@ -9,3 +9,5 @@ pkg
 *.lock
 .settings
 .c9revisions
+.idea
+doc
