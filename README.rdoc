@@ -1,6 +1,6 @@
-= ruby-xbee
+= ruby-xbee {<img src="https://travis-ci.org/exsilium/ruby-xbee.png" />}[https://travis-ci.org/exsilium/ruby-xbee]
 
-== Ruby::XBee - What is it? {<img src="https://travis-ci.org/exsilium/ruby-xbee.png" />}[https://travis-ci.org/exsilium/ruby-xbee]
+== Ruby::XBee - What is it?
 Ruby::XBee lets you configure and access Digi XBee RF devices using ruby classes and ruby-based 
 command line utilities.
 
