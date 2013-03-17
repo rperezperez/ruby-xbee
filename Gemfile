@@ -7,7 +7,6 @@ gemspec
 
 group :assets do
   gem 'rake',               '~> 10.0.0'
-  gem 'shoulda',            '~> 3.3.0'
   gem 'hanna-nouveau',      '~> 0.2.6', :require => false
 end
 
