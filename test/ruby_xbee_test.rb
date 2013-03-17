@@ -1,7 +1,19 @@
+$: << File.dirname(__FILE__)
 require 'test_helper'
 
-class RubyXbeeTest < Test::Unit::TestCase
-  should "probably rename this file and start testing for real" do
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+# The most simple test there can possibly BE, let's check constant for constant
+class RubyXbeeTest < MiniTest::Unit::TestCase
+  def setup
+      @xbee_version_major = ::XBee::Version::MAJOR
+      @xbee_version_minor = ::XBee::Version::MINOR
+      @xbee_version_patch = ::XBee::Version::PATCH
+      @xbee_version_string = ::XBee::Version::STRING
+  end
+
+  def test_version_matches_testsuite
+    assert_equal 1, @xbee_version_major
+    assert_equal 1, @xbee_version_minor
+    assert_equal 0, @xbee_version_patch
+    assert_equal '1.1.0', @xbee_version_string
   end
 end

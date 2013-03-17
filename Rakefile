@@ -1,8 +1,8 @@
 require 'rubygems'
-require 'yaml'
 require 'rake'
-
 require 'rake/testtask'
+require './lib/version.rb'
+
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/*_test.rb'
@@ -27,15 +27,11 @@ task :default => :test
 
 require 'rdoc/task'
 RDoc::Task.new do |rdoc|
-  if File.exist?('VERSION.yml')
-    config = YAML.load(File.read('VERSION.yml'))
-    version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
-  else
-    version = ''
-  end
+  version = XBee::Version::STRING
 
-  rdoc.rdoc_dir = 'rdoc'
+  rdoc.rdoc_dir = 'doc'
   rdoc.title = "ruby-xbee #{version}"
+  rdoc.options << '-f' << 'hanna'
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

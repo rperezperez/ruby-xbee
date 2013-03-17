@@ -1,3 +1,9 @@
 module XBee #:nodoc
-  VERSION = '1.1.0'
+  module Version
+    MAJOR = 1
+    MINOR = 1
+    PATCH = 0
+
+    STRING = [MAJOR, MINOR, PATCH].compact.join('.')
+  end
 end

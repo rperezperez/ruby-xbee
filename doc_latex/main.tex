@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{setspace}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{epigraph} % Beautiful quotes
 % Code environment
 \lstset{language=Ruby, tabsize=2}
 \def\codefont{
@@ -52,6 +53,12 @@
 \newcommand{\smalltodo}[2][] {\todo[caption={#2}, #1]
  {\begin{spacing}{0.5}#2\end{spacing}}}
 % Bug and notes command end
+
+% Epigraph style
+%\renewcommand{\textflush}{flushleft} \renewcommand{\sourceflush}{flushleft}
+\renewcommand{\epigraphflush}{center}
+\renewcommand{\textflush}{flushepinormal}
+\setlength{\epigraphwidth}{14cm}
 
 \input{article.tex}
 \input{content.tex}

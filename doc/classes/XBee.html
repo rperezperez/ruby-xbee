@@ -78,13 +78,16 @@
           <li class='other'>
             <a target="docwin" href="../files/lib/ruby_xbee_rb.html">lib/ruby_xbee.rb</a>
           </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/version_rb.html">lib/version.rb</a>
+          </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
           </li>
         </ol>
         <div class='parent'>
           Parent:
-          <strong><a target="docwin" href="../files/lib/ruby_xbee_rb.html">ruby_xbee.rb</a></strong>
+          <strong><a target="docwin" href="../files/lib/version_rb.html">version.rb</a></strong>
         </div>
       </div>
       <div id='content'>
@@ -109,9 +112,12 @@
               <li><a target="docwin" href="XBee/ATCommands.html">XBee::ATCommands</a></li>
               <li><a target="docwin" href="XBee/Config.html">XBee::Config</a></li>
               <li><a target="docwin" href="XBee/Frame.html">XBee::Frame</a></li>
+              <li><a target="docwin" href="XBee/Version.html">XBee::Version</a></li>
               <li><a target="docwin" href="XBee/BaseAPIModeInterface.html">XBee::BaseAPIModeInterface</a></li>
               <li><a target="docwin" href="XBee/BaseCommandModeInterface.html">XBee::BaseCommandModeInterface</a></li>
               <li><a target="docwin" href="XBee/RFModule.html">XBee::RFModule</a></li>
+              <li><a target="docwin" href="XBee/Series1APIModeInterface.html">XBee::Series1APIModeInterface</a></li>
+              <li><a target="docwin" href="XBee/Series2APIModeInterface.html">XBee::Series2APIModeInterface</a></li>
               <li><a target="docwin" href="XBee/XBeeV1CommandModeInterface.html">XBee::XBeeV1CommandModeInterface</a></li>
               <li><a target="docwin" href="XBee/XBeeV2CommandModeInterface.html">XBee::XBeeV2CommandModeInterface</a></li>
             </ol>
@@ -133,7 +139,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/ruby_xbee.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-constant">XBee</span>.<span class="ruby-identifier">new</span>( <span class="ruby-identifier">xbee_usbdev_str</span>, <span class="ruby-identifier">baud</span>, <span class="ruby-identifier">data_bits</span>, <span class="ruby-identifier">stop_bits</span>, <span class="ruby-identifier">parity</span> )&#x000A;  <span class="ruby-identifier">require</span> <span class="ruby-string">'legacy/command_mode'</span>&#x000A;  <span class="ruby-constant">BaseCommandModeInterface</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">xbee_usbdev_str</span>, <span class="ruby-identifier">baud</span>, <span class="ruby-identifier">data_bits</span>, <span class="ruby-identifier">stop_bits</span>, <span class="ruby-identifier">parity</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/ruby_xbee.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-constant">XBee</span>.<span class="ruby-identifier">new</span>( <span class="ruby-identifier">xbee_usbdev_str</span>, <span class="ruby-identifier">baud</span>, <span class="ruby-identifier">data_bits</span>, <span class="ruby-identifier">stop_bits</span>, <span class="ruby-identifier">parity</span> )&#x000A;  <span class="ruby-identifier">require</span> <span class="ruby-string">'legacy/command_mode'</span>&#x000A;  <span class="ruby-constant">BaseCommandModeInterface</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">xbee_usbdev_str</span>, <span class="ruby-identifier">baud</span>, <span class="ruby-identifier">data_bits</span>, <span class="ruby-identifier">stop_bits</span>, <span class="ruby-identifier">parity</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -152,7 +158,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-getresults-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-getresults-source'><span class="ruby-comment"># File lib/ruby_xbee.rb, line 50</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">getresults</span>( <span class="ruby-identifier">sp</span>, <span class="ruby-identifier">echo</span> = <span class="ruby-keyword">true</span> )&#x000A;  <span class="ruby-identifier">results</span> = <span class="ruby-string">&quot;&quot;</span>&#x000A;  <span class="ruby-keyword">while</span> (<span class="ruby-identifier">c</span> = <span class="ruby-identifier">sp</span>.<span class="ruby-identifier">getc</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">if</span> ( <span class="ruby-operator">!</span><span class="ruby-identifier">echo</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">echo</span> )&#x000A;      <span class="ruby-identifier">putc</span> <span class="ruby-identifier">c</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">results</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{c.chr}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># deal with multiple lines</span>&#x000A;  <span class="ruby-identifier">results</span>.<span class="ruby-identifier">gsub!</span>( <span class="ruby-string">&quot;\r&quot;</span>, <span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-getresults-source'><span class="ruby-comment"># File lib/ruby_xbee.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">getresults</span>( <span class="ruby-identifier">sp</span>, <span class="ruby-identifier">echo</span> = <span class="ruby-keyword">true</span> )&#x000A;  <span class="ruby-identifier">results</span> = <span class="ruby-string">&quot;&quot;</span>&#x000A;  <span class="ruby-keyword">while</span> (<span class="ruby-identifier">c</span> = <span class="ruby-identifier">sp</span>.<span class="ruby-identifier">getc</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">if</span> ( <span class="ruby-operator">!</span><span class="ruby-identifier">echo</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">echo</span> )&#x000A;      <span class="ruby-identifier">putc</span> <span class="ruby-identifier">c</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">results</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{c.chr}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># deal with multiple lines</span>&#x000A;  <span class="ruby-identifier">results</span>.<span class="ruby-identifier">gsub!</span>( <span class="ruby-string">&quot;\r&quot;</span>, <span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
