@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.authors = ['Sten Feldman']
-  s.date = %q{2013-03-15}
+  s.date = %q{2013-06-04}
   s.email = %q{exile@chamber.ee}
   s.executables = %w(apicontrol.rb apilisten.rb ruby-xbee.rb xbeeconfigure.rb xbeedio.rb xbeeinfo.rb xbeelisten.rb xbeesend.rb)
   s.extra_rdoc_files = %w(LICENSE agpl.txt README.rdoc)
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
     test/test_helper.rb)
 
   s.has_rdoc = true
-  s.homepage = %q{http://github.com/exsilium/ruby-xbee}
+  s.homepage = %q{http://github.com/rperezperez/ruby-xbee}
   s.rdoc_options = %w(--charset=UTF-8)
   s.require_paths = %w(lib)
   s.rubygems_version = %q{1.3.1}

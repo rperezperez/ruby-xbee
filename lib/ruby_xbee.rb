@@ -37,6 +37,16 @@ require 'serialport'
 
 require 'module_config'
 
+if RUBY_VERSION == "1.8.7"
+  ##
+  # This is add key function in HASH class for ruby 1.8.7
+  class Hash
+    def key(value)
+      return self.invert[value]
+    end
+  end
+end
+
 module XBee
 
   ##
@@ -60,7 +70,6 @@ module XBee
     # deal with multiple lines
     results.gsub!( "\r", "\n")
   end
-
 
   ##
   # This is it, the base class where it all starts. Command mode or API mode, version 1 or version 2, all XBees descend

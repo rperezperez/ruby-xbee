@@ -1,7 +1,7 @@
 module XBee
   class BaseCommandModeInterface < RFModule
 
-    VERSION = "1.0" # Version of this class
+    VERSION = "1.0.1" # Version of this class
 
     ##
     # initializes the communication link with the XBee device.  These parameters must match those which
@@ -32,7 +32,8 @@ module XBee
       # if XBee is already in command mode, there will be no response, so make an explicit
       # AT call to insure an OK response
       @xbee_serialport.write("AT\r")
-      getresponse().strip.chomp if getresponse()
+      response = getresponse
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -123,7 +124,8 @@ module XBee
 =end
     def my_src_address
       @xbee_serialport.write("ATMY\r")
-      getresponse.strip.chomp if getresponse
+      response = getresponse
+      response.strip.chomp if response
     end
 
 =begin rdoc
@@ -274,7 +276,8 @@ module XBee
 =end
     def received_signal_strength
       @xbee_serialport.write("ATDB\r")
-      response = getresponse().strip.chomp if getresponse()
+      response = getresponse
+      response = response.strip.chomp if response
       # this response is an absolute hex value which is in -dBm
       # modify this so it returns actual - dBm value
       dbm = -(response.hex) if response
@@ -313,7 +316,8 @@ module XBee
 =end
    def parity
      @xbee_serialport.write("ATNB\r")
-     response = getresponse().strip.chomp if getresponse()
+     response = getresponse
+     response = response.strip.chomp if response
      @paritycodes.key( response.to_i )
    end
 

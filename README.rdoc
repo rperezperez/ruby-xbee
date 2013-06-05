@@ -47,12 +47,14 @@ xbeeinfo.rb, xbeeconfigure.rb, xbeedio.rb, xbeelisten.rb, xbeesend.rb
 Additional examples may be posted on http://sawdust.see-do.org as time goes on.
 
 == Quick Start
-0. install ruby 1.8.7 for your platform (see http://www.ruby-lang.org)
+0. install ruby 1.9.3 for your platform (see http://www.ruby-lang.org)
 1. download the ruby-xbee tarball ( http://sawdust.see-do.org/ruby-xbee/ruby-xbee-downloads.html )
 2. tar extract the bundle into its permanent directory
 3. make a symlink for serial-port-0.6
 4. determine your /dev string and configure that in config/xbeeconfig.rb
 5. try ./xbeeinfo.rb
+
+Note: You can try to use rvm for different ruby versions ( http://www.rubyinside.com/rvm-ruby-version-manager-2347.html )
 
 == Detailed Quick Start
 === tar extract the bundle into the directory where you want to use the package.  
